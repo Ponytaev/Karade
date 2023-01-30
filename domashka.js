@@ -34,6 +34,7 @@ const News = [];
 const User = [];
 d = 0;
 z = 0;
+g = 0;
 
 del.post("/auth/", (req,res)=>{
     username = req.headers.username;
@@ -44,6 +45,7 @@ del.post("/auth/", (req,res)=>{
     } else {
      d = Math.ceil(Math.random()*10);
      z = Math.ceil(Math.random()*10);
+     g=d+z;
      User.push({username,password});
      res.json({d,z})
     }
@@ -51,9 +53,12 @@ del.post("/auth/", (req,res)=>{
 
 del.post("/auth/confirm",(req,res)=>{
     username = req.headers.username;
-     g=d+z;
-     res.json(User);
-    res.json({g});
+    verif = req.headers.verif;
+    if (verif !== g){
+        return res.json({message: "профиль не пордтвержден"})
+    } else {
+        return res.json({message: "профиль пордтвержден"})
+    }
 })
 del.post("/news/", secure , (req,res)=>{
     title = req.headers.title;
